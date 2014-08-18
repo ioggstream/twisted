@@ -84,6 +84,9 @@ __all__ = [
     # From ._json
     "eventAsJSON", "eventFromJSON",
     "jsonFileLogObserver", "eventsFromJSONLogFile",
+    
+    # From ._syslog
+    "SyslogObserver", "textSyslogObserver"
 ]
 
 from ._levels import InvalidLogLevelError, LogLevel
@@ -122,4 +125,8 @@ from ._global import (
 from ._json import (
     eventAsJSON, eventFromJSON,
     jsonFileLogObserver, eventsFromJSONLogFile
+)
+
+from ._syslog import (
+      SyslogObserver, textSyslogObserver
 )
