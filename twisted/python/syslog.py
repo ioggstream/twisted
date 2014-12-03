@@ -10,12 +10,25 @@ You probably want to call L{startLogging}.
 
 syslog = __import__('syslog')
 
+import logging
 from twisted.python import log
 
 # These defaults come from the Python syslog docs.
 DEFAULT_OPTIONS = 0
 DEFAULT_FACILITY = syslog.LOG_USER
 
+# Mappings to Python's syslog module
+toSyslogLevelMapping = {
+	logging.DEBUG: syslog.LOG_DEBUG,
+        logging.INFO: syslog.LOG_INFO,
+        logging.WARN: syslog.LOG_WARNING,
+        logging.ERROR: syslog.LOG_ERR,
+        logging.CRITICAL: syslog.LOG_ALERT,
+       }
+fromSyslogLevelMapping = dict((value, key) 
+    for (key, value)
+    in toSyslogLevelMapping.items()
+)
 
 
 class SyslogObserver:
@@ -67,14 +80,24 @@ class SyslogObserver:
         text = log.textFromEventDict(eventDict)
         if text is None:
             return
-
+        
         # Figure out what syslog parameters we might need to use.
         priority = syslog.LOG_INFO
         facility = 0
-        if eventDict['isError']:
-            priority = syslog.LOG_ALERT
+        
+        # Set priority by loglevel and eventually
+        #  override it if isError or syslogPriority is defined
         if 'syslogPriority' in eventDict:
             priority = int(eventDict['syslogPriority'])
+        elif 'logLevel' in eventDict:
+            priority = toSyslogLevelMapping.get(
+                eventDict['logLevel'], 
+                syslog.LOG_INFO)
+        elif eventDict['isError']:
+            # custom priority ovverrides isError
+            priority = syslog.LOG_ALERT    
+        
+
         if 'syslogFacility' in eventDict:
             facility = int(eventDict['syslogFacility'])
 

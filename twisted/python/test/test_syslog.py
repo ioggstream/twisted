@@ -4,6 +4,7 @@
 from twisted.trial.unittest import TestCase
 from twisted.python.failure import Failure
 
+import logging
 try:
     import syslog as stdsyslog
 except ImportError:
@@ -149,3 +150,91 @@ class SyslogObserverTests(TestCase):
             self.events,
             [(stdsyslog.LOG_INFO, '[-] hello,'),
              (stdsyslog.LOG_INFO, '[-] \tworld')])
+
+
+    def logLevelHarness(self, expected, actual):
+        """
+        Raises exception if the evaluated syslogPriority 
+        does not match the expected value.
+        """
+        m = {
+            'message': ('hello,\nworld\n\n',), 
+            'isError': False,
+            'system': '-',
+        }
+        m.update(actual)
+        self.observer.emit(m)
+        self.assertEqual(
+            self.events,
+            [(expected, '[-] hello,'),
+             (expected, '[-] \tworld')])
+
+
+    def test_emitLevelMissingLevelUseDefault(self):
+        """
+        On missing logLevel defaults to stdsyslog.LOG_INFO
+        """
+        expected, actual  = stdsyslog.LOG_INFO, {}
+        self.logLevelHarness(expected, actual)
+
+
+    def test_emitLevelInvalidLevelUseDefault(self):
+        """
+        On invalid logLevel defaults to stdsyslog.LOG_INFO
+        """
+        expected, actual  = stdsyslog.LOG_INFO, {'logLevel':'INVALID'}
+        self.logLevelHarness(expected, actual)
+
+
+    def test_emitLevelWARN(self):
+        """
+        Logging levels are nicely mapped to syslog priorities
+        https://twistedmatrix.com/documents/14.0.0/core/howto/logging.html
+         """
+        expected, actual = stdsyslog.LOG_WARNING, {'logLevel':logging.WARN}
+        self.logLevelHarness(expected, actual)
+
+
+    def test_emitLevelERR(self):
+        """
+        Logging levels are nicely mapped to syslog priorities
+        https://twistedmatrix.com/documents/14.0.0/core/howto/logging.html
+         """
+        expected, actual = stdsyslog.LOG_ERR, {'logLevel':logging.ERROR}
+        self.logLevelHarness(expected, actual)
+
+
+    def test_emitLevelDEBUG(self):
+        """
+        Logging levels are nicely mapped to syslog priorities
+        https://twistedmatrix.com/documents/14.0.0/core/howto/logging.html
+         """
+        expected, actual = stdsyslog.LOG_DEBUG, {'logLevel':logging.DEBUG}
+        self.logLevelHarness(expected, actual)
+
+
+    def test_emitLevelIsError(self):
+        """
+        Messages with isError=True are mapped to LOG_ALERT
+        """
+        expected, actual = stdsyslog.LOG_ALERT, {'isError':True}
+        self.logLevelHarness(expected, actual)
+
+
+    def test_emitLevelOvverrideIsError(self):
+        """
+        Using logLevel ovverrides isError
+        """
+        expected, actual = stdsyslog.LOG_INFO, {'isError':True,
+            'logLevel':logging.INFO}
+        self.logLevelHarness(expected, actual)
+
+
+    def test_emitLevelPriorityOverridesLogLevel(self):
+        """
+        Using syslogPriority overrides logLevel 
+        """
+        expected, actual = stdsyslog.LOG_ALERT, {'isError':False,
+            'logLevel':logging.INFO,'syslogPriority': stdsyslog.LOG_ALERT}
+        self.logLevelHarness(expected, actual)
+
