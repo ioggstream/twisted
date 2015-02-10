@@ -154,7 +154,13 @@ class SyslogObserverTests(TestCase):
 
     def assertPriorityMapping(self, expected, event):
         """
-        Check that when emitted, event is translated into expected syslog level
+        Check that when emitted, C{event} is translated into C{expected} syslog priority
+
+        @param expected: a L{syslog} priority
+        @type expected: C{int}
+        @param event: an event
+        @type event: C{dict}
+
         """
         m = {
             'message': ('hello,\nworld\n\n',),
