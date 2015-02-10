@@ -25,10 +25,6 @@ _toSyslogLevelMapping = {
     logging.ERROR: syslog.LOG_ERR,
     logging.CRITICAL: syslog.LOG_ALERT,
 }
-_fromSyslogLevelMapping = dict((value, key)
-                              for (key, value)
-                              in _toSyslogLevelMapping.items()
-                              )
 
 
 class SyslogObserver:
