@@ -17,7 +17,7 @@ from twisted.python import log
 DEFAULT_OPTIONS = 0
 DEFAULT_FACILITY = syslog.LOG_USER
 
-# Mappings from/to Python's syslog module
+# Mappings to Python's syslog module.
 _toSyslogLevelMapping = {
     logging.DEBUG: syslog.LOG_DEBUG,
     logging.INFO: syslog.LOG_INFO,
@@ -58,6 +58,7 @@ class SyslogObserver:
         """
         self.openlog(prefix, options, facility)
 
+
     def emit(self, eventDict):
         """
         Send a message event to the I{syslog}.
@@ -81,7 +82,7 @@ class SyslogObserver:
         facility = 0
 
         # Set priority by loglevel and eventually
-        #  override it if isError or syslogPriority is defined
+        #  override it if isError or syslogPriority is defined.
         if 'syslogPriority' in eventDict:
             priority = int(eventDict['syslogPriority'])
         elif 'logLevel' in eventDict:
@@ -106,6 +107,7 @@ class SyslogObserver:
                 line = '\t' + line
             self.syslog(priority | facility,
                         '[%s] %s' % (eventDict['system'], line))
+
 
 
 def startLogging(prefix='Twisted', options=DEFAULT_OPTIONS,

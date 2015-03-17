@@ -154,7 +154,8 @@ class SyslogObserverTests(TestCase):
 
     def assertPriorityMapping(self, expected, event):
         """
-        Check that when emitted, C{event} is translated into C{expected} syslog priority
+        Check that when emitted, C{event} is translated into
+        C{expected} syslog priority.
 
         @param expected: a L{syslog} priority
         @type expected: C{int}
@@ -195,7 +196,7 @@ class SyslogObserverTests(TestCase):
         """
         Logging levels are nicely mapped to syslog priorities
         https://twistedmatrix.com/documents/14.0.0/core/howto/logging.html
-         """
+        """
         expected, event = stdsyslog.LOG_WARNING, {'logLevel': logging.WARN}
         self.assertPriorityMapping(expected, event)
 
@@ -204,7 +205,7 @@ class SyslogObserverTests(TestCase):
         """
         Logging levels are nicely mapped to syslog priorities
         https://twistedmatrix.com/documents/14.0.0/core/howto/logging.html
-         """
+        """
         expected, event = stdsyslog.LOG_ERR, {'logLevel': logging.ERROR}
         self.assertPriorityMapping(expected, event)
 
@@ -213,7 +214,7 @@ class SyslogObserverTests(TestCase):
         """
         Logging levels are nicely mapped to syslog priorities
         https://twistedmatrix.com/documents/14.0.0/core/howto/logging.html
-         """
+        """
         expected, event = stdsyslog.LOG_DEBUG, {'logLevel': logging.DEBUG}
         self.assertPriorityMapping(expected, event)
 
@@ -231,7 +232,7 @@ class SyslogObserverTests(TestCase):
         Using logLevel ovverrides isError
         """
         expected, event = stdsyslog.LOG_INFO, {'isError': True,
-                                                'logLevel': logging.INFO}
+                                               'logLevel': logging.INFO}
         self.assertPriorityMapping(expected, event)
 
 
@@ -239,7 +240,8 @@ class SyslogObserverTests(TestCase):
         """
         Using syslogPriority overrides logLevel
         """
-        expected, event = stdsyslog.LOG_ALERT, {'isError': False,
-                                                 'logLevel': logging.INFO,
-                                                 'syslogPriority': stdsyslog.LOG_ALERT}
+        expected, event = stdsyslog.LOG_ALERT, {
+            'isError': False,
+            'logLevel': logging.INFO,
+            'syslogPriority': stdsyslog.LOG_ALERT}
         self.assertPriorityMapping(expected, event)
