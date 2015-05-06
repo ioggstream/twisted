@@ -199,22 +199,21 @@ class SyslogObserverTests(TestCase):
 
     def test_emitLevelMissingLevelUseDefault(self):
         """
-        On missing logLevel defaults to stdsyslog.LOG_INFO
+        On missing logLevel defaults to stdsyslog.LOG_INFO.
         """
         self.assertPriorityMapping(stdsyslog.LOG_INFO, {})
 
 
     def test_emitLevelInvalidLevelUseDefault(self):
         """
-        On invalid logLevel defaults to stdsyslog.LOG_INFO
+        On invalid logLevel defaults to stdsyslog.LOG_INFO.
         """
         self.assertPriorityMapping(stdsyslog.LOG_INFO, {'logLevel': 'INVALID'})
 
 
     def test_emitLevelWARN(self):
         """
-        Logging levels are nicely mapped to syslog priorities
-        https://twistedmatrix.com/documents/14.0.0/core/howto/logging.html
+        Logging levels are nicely mapped to syslog priorities.
         """
         self.assertPriorityMapping(
             stdsyslog.LOG_WARNING, {'logLevel': logging.WARN}
@@ -223,8 +222,7 @@ class SyslogObserverTests(TestCase):
 
     def test_emitLevelERR(self):
         """
-        Logging levels are nicely mapped to syslog priorities
-        https://twistedmatrix.com/documents/14.0.0/core/howto/logging.html
+        Logging levels are nicely mapped to syslog priorities.
         """
         self.assertPriorityMapping(
             stdsyslog.LOG_ERR, {'logLevel': logging.ERROR}
@@ -233,8 +231,7 @@ class SyslogObserverTests(TestCase):
 
     def test_emitLevelDEBUG(self):
         """
-        Logging levels are nicely mapped to syslog priorities
-        https://twistedmatrix.com/documents/14.0.0/core/howto/logging.html
+        Logging levels are nicely mapped to syslog priorities.
         """
         self.assertPriorityMapping(
             stdsyslog.LOG_DEBUG, {'logLevel': logging.DEBUG}
@@ -243,7 +240,7 @@ class SyslogObserverTests(TestCase):
 
     def test_emitLevelIsError(self):
         """
-        Messages with isError=True are mapped to LOG_ALERT
+        Messages with isError=True are mapped to LOG_ALERT.
         """
         self.assertPriorityMapping(
             stdsyslog.LOG_ALERT, {'isError': True}
@@ -252,7 +249,7 @@ class SyslogObserverTests(TestCase):
 
     def test_emitLevelOvverrideIsError(self):
         """
-        Using logLevel ovverrides isError
+        Using logLevel ovverrides isError.
         """
         self.assertPriorityMapping(
             stdsyslog.LOG_INFO, {'isError': True, 'logLevel': logging.INFO}
@@ -261,7 +258,7 @@ class SyslogObserverTests(TestCase):
 
     def test_emitLevelPriorityOverridesLogLevel(self):
         """
-        Using syslogPriority overrides logLevel
+        Using syslogPriority overrides logLevel.
         """
         self.assertPriorityMapping(
             stdsyslog.LOG_ALERT,
@@ -270,4 +267,40 @@ class SyslogObserverTests(TestCase):
                 'logLevel': logging.INFO,
                 'syslogPriority': stdsyslog.LOG_ALERT,
             }
+        )
+
+
+    def test_emitLevelWARNString(self):
+        """
+        Logging levels are nicely mapped to syslog priorities
+        """
+        self.assertPriorityMapping(
+            stdsyslog.LOG_WARNING, {'logLevel': 'WARN'}
+        )
+
+
+    def test_emitLevelWARNINGString(self):
+        """
+        Logging levels are nicely mapped to syslog priorities
+        """
+        self.assertPriorityMapping(
+            stdsyslog.LOG_WARNING, {'logLevel': 'WARNING'}
+        )
+
+
+    def test_emitLevelCRITICALString(self):
+        """
+        Logging levels are nicely mapped to syslog priorities
+        """
+        self.assertPriorityMapping(
+            stdsyslog.LOG_ALERT, {'logLevel': 'CRITICAL'}
+        )
+
+
+    def test_emitLevelFATALString(self):
+        """
+        Logging levels are nicely mapped to syslog priorities
+        """
+        self.assertPriorityMapping(
+            stdsyslog.LOG_ALERT, {'logLevel': 'FATAL'}
         )

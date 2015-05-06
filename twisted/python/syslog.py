@@ -24,6 +24,14 @@ _toSyslogLevelMapping = {
     logging.WARN: syslog.LOG_WARNING,
     logging.ERROR: syslog.LOG_ERR,
     logging.CRITICAL: syslog.LOG_ALERT,
+    logging.FATAL: syslog.LOG_ALERT,
+    'DEBUG': syslog.LOG_DEBUG,
+    'INFO': syslog.LOG_INFO,
+    'WARN': syslog.LOG_WARNING,
+    'WARNING': syslog.LOG_WARNING,
+    'ERROR': syslog.LOG_ERR,
+    'CRITICAL': syslog.LOG_ALERT,
+    'FATAL': syslog.LOG_ALERT
 }
 
 
